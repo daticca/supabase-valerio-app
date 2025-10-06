@@ -2,8 +2,9 @@ import React, { useState, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { useDropzone } from "react-dropzone";
 import { Camera, Mic, ImagePlus } from "lucide-react";
+import valerioPhoto from "./assets/valerio.jpeg";
 
-// Supabase client con variabili d'ambiente
+// Supabase
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -17,7 +18,6 @@ export default function App() {
   const mediaRecorderRef = useRef();
   const [stream, setStream] = useState(null);
 
-  // Drag & drop dei file
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: async (acceptedFiles) => {
       setFiles(acceptedFiles);
@@ -27,7 +27,6 @@ export default function App() {
     },
   });
 
-  // Upload su Supabase
   const uploadFile = async (file) => {
     const filename = `${Date.now()}_${file.name || "media.webm"}`;
     const { data, error } = await supabase.storage
@@ -41,13 +40,10 @@ export default function App() {
       .from("valerio-uploads")
       .getPublicUrl(filename).data.publicUrl;
 
-    // Salva metadati nel database
     await supabase.from("files").insert([{ filename, url, type: file.type }]);
-
     setPreview((prev) => [...prev, url]);
   };
 
-  // Registrazione audio/video
   const startRecording = async () => {
     const mediaStream = await navigator.mediaDevices.getUserMedia({
       video: true,
@@ -73,7 +69,6 @@ export default function App() {
     setRecording(false);
   };
 
-  // Scatta selfie
   const takePhoto = async () => {
     const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
     const video = document.createElement("video");
@@ -91,63 +86,61 @@ export default function App() {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Upload e Registrazione Web</h1>
-
-      {/* Drag & Drop */}
-      <div
-        {...getRootProps()}
-        className="border p-4 mb-4 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition rounded"
-      >
-        <input {...getInputProps()} />
-        <ImagePlus className="w-6 h-6 mr-2 text-blue-500" />
-        <p>Trascina i file qui o clicca per selezionare</p>
+    <div className="p-6 max-w-4xl mx-auto">
+      {/* Titolo in frame */}
+      <div className="bg-blue-500 text-white p-4 rounded shadow mb-6 text-center">
+        <h1 className="text-3xl font-bold">Upload e Registrazione Web</h1>
       </div>
 
-      <button
-        onClick={() => files.forEach(uploadFile)}
-        className="mb-4 bg-blue-500 text-white px-4 py-2 rounded flex items-center hover:bg-blue-600 transition"
-      >
-        <ImagePlus className="w-5 h-5 mr-2" /> Upload Selezionati
-      </button>
+      {/* Foto */}
+      <div className="flex justify-center mb-6">
+        <img
+          src={valerioPhoto}
+          alt="Valerio"
+          className="w-48 h-48 object-cover rounded-full shadow-lg"
+        />
+      </div>
 
-      {/* Live video / registrazione */}
-      <div className="mb-4 flex flex-wrap gap-2 items-center">
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          className="w-64 h-48 border mb-2 rounded"
-        ></video>
+      {/* Pulsanti grandi affiancati / responsive */}
+      <div className="flex flex-wrap justify-center gap-4 mb-6">
+        {/* Drag & drop / scegli file */}
+        <button
+          {...getRootProps()}
+          className="bg-blue-500 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition w-full sm:w-auto justify-center"
+        >
+          <ImagePlus className="w-6 h-6" /> Scegli File
+          <input {...getInputProps()} />
+        </button>
 
+        {/* Selfie */}
+        <button
+          onClick={takePhoto}
+          className="bg-yellow-500 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:bg-yellow-600 transition w-full sm:w-auto justify-center"
+        >
+          <Camera className="w-6 h-6" /> Scatta Selfie
+        </button>
+
+        {/* Registrazione audio/video */}
         {!recording ? (
           <button
             onClick={startRecording}
-            className="bg-green-500 text-white px-4 py-2 rounded flex items-center mr-2 hover:bg-green-600 transition"
+            className="bg-green-500 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:bg-green-600 transition w-full sm:w-auto justify-center"
           >
-            <Mic className="w-5 h-5 mr-2" /> Start Recording
+            <Mic className="w-6 h-6" /> Registra
           </button>
         ) : (
           <button
             onClick={stopRecording}
-            className="bg-red-500 text-white px-4 py-2 rounded flex items-center mr-2 hover:bg-red-600 transition"
+            className="bg-red-500 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:bg-red-600 transition w-full sm:w-auto justify-center"
           >
-            <Mic className="w-5 h-5 mr-2" /> Stop Recording
+            <Mic className="w-6 h-6" /> Stop
           </button>
         )}
-
-        <button
-          onClick={takePhoto}
-          className="bg-yellow-500 text-white px-4 py-2 rounded flex items-center hover:bg-yellow-600 transition"
-        >
-          <Camera className="w-5 h-5 mr-2" /> Scatta Selfie
-        </button>
       </div>
 
-      {/* Anteprime file */}
-      <div className="grid grid-cols-3 gap-2 mt-4">
+      {/* Anteprime file responsive */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {preview.map((url, idx) => {
-          // Mostra video se tipo video, altrimenti immagine
           if (url.endsWith(".mp4") || url.endsWith(".webm")) {
             return (
               <video
