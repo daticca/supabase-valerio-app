@@ -3,8 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 import { useDropzone } from "react-dropzone";
 
 // Inserisci qui le tue credenziali Supabase
-const supabaseUrl = "https://YOUR_PROJECT.supabase.co";
-const supabaseKey = "YOUR_ANON_KEY";
+const supabaseUrl = "https://wkegigbnhuiucdzqqnhr.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrZWdpZ2JuaHVpdWNkenFxbmhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3Nzk5NDEsImV4cCI6MjA3NTM1NTk0MX0.Ywbk-MnA0WDb6jKBQEb8O0_iTKSi8Ezvs59dot_ZohQ";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default function App() {
