@@ -86,10 +86,47 @@ export default function App() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300 p-6">
       {/* Titolo in frame */}
-      <div className="bg-blue-500 text-white p-4 rounded shadow mb-6 text-center">
+      <div className="bg-blue-600 text-white p-4 rounded shadow mb-6 text-center">
         <h1 className="text-3xl font-bold">Upload e Registrazione Web</h1>
+      </div>
+
+      {/* Pulsanti grandi affiancati / responsive */}
+      <div className="flex flex-wrap justify-center gap-4 mb-6">
+        {/* Drag & drop / scegli file */}
+        <button
+          {...getRootProps()}
+          className="bg-gradient-to-r from-blue-400 to-blue-600 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:from-blue-500 hover:to-blue-700 transition w-full sm:w-auto justify-center"
+        >
+          <ImagePlus className="w-6 h-6" /> Scegli File
+          <input {...getInputProps()} />
+        </button>
+
+        {/* Selfie */}
+        <button
+          onClick={takePhoto}
+          className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:from-yellow-500 hover:to-yellow-600 transition w-full sm:w-auto justify-center"
+        >
+          <Camera className="w-6 h-6" /> Scatta Selfie
+        </button>
+
+        {/* Registrazione audio/video */}
+        {!recording ? (
+          <button
+            onClick={startRecording}
+            className="bg-gradient-to-r from-green-400 to-green-600 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:from-green-500 hover:to-green-700 transition w-full sm:w-auto justify-center"
+          >
+            <Mic className="w-6 h-6" /> Registra
+          </button>
+        ) : (
+          <button
+            onClick={stopRecording}
+            className="bg-gradient-to-r from-red-400 to-red-600 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:from-red-500 hover:to-red-700 transition w-full sm:w-auto justify-center"
+          >
+            <Mic className="w-6 h-6" /> Stop
+          </button>
+        )}
       </div>
 
       {/* Foto */}
@@ -99,43 +136,6 @@ export default function App() {
           alt="Valerio"
           className="w-48 h-48 object-cover rounded-full shadow-lg"
         />
-      </div>
-
-      {/* Pulsanti grandi affiancati / responsive */}
-      <div className="flex flex-wrap justify-center gap-4 mb-6">
-        {/* Drag & drop / scegli file */}
-        <button
-          {...getRootProps()}
-          className="bg-blue-500 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition w-full sm:w-auto justify-center"
-        >
-          <ImagePlus className="w-6 h-6" /> Scegli File
-          <input {...getInputProps()} />
-        </button>
-
-        {/* Selfie */}
-        <button
-          onClick={takePhoto}
-          className="bg-yellow-500 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:bg-yellow-600 transition w-full sm:w-auto justify-center"
-        >
-          <Camera className="w-6 h-6" /> Scatta Selfie
-        </button>
-
-        {/* Registrazione audio/video */}
-        {!recording ? (
-          <button
-            onClick={startRecording}
-            className="bg-green-500 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:bg-green-600 transition w-full sm:w-auto justify-center"
-          >
-            <Mic className="w-6 h-6" /> Registra
-          </button>
-        ) : (
-          <button
-            onClick={stopRecording}
-            className="bg-red-500 text-white px-6 py-4 rounded-lg flex items-center gap-2 hover:bg-red-600 transition w-full sm:w-auto justify-center"
-          >
-            <Mic className="w-6 h-6" /> Stop
-          </button>
-        )}
       </div>
 
       {/* Anteprime file responsive */}
