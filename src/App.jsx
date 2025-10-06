@@ -29,12 +29,12 @@ export default function App() {
   // Funzione per upload su Supabase
   const uploadFile = async (file) => {
     const filename = `${Date.now()}_${file.name || "media.webm"}`;
-    const { data, error } = await supabase.storage.from("uploads").upload(filename, file);
+    const { data, error } = await supabase.storage.from("valerio-uploads").upload(filename, file);
     if (error) {
       console.log("Upload error:", error);
       return;
     }
-    const url = supabase.storage.from("uploads").getPublicUrl(filename).data.publicUrl;
+    const url = supabase.storage.from("valerio-uploads").getPublicUrl(filename).data.publicUrl;
     console.log("File uploaded:", url);
 
     // Salva metadati nel database
