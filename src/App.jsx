@@ -21,5 +21,6 @@ export default function App() {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: async (acceptedFiles) => {
       setFiles(acceptedFiles);
-      acceptedFiles.forEach((file) => {
-        setPreview((prev) => [...prev, URL.createO]()
+		acceptedFiles.forEach((file) => {
+			setPreview((prev) => [...prev, URL.createObjectURL(file)]);
+		});
